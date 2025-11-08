@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Particle in a 3D Box Visualizer ⚛</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- MathJax -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async
+            src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Plotly -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <canvas id="particles-bg"></canvas>
+    <header>⚛ Quantum Particle in a 3D Box Visualizer ⚛</header>
+
+    <!-- Input Panel -->
+    <div class="panel">
+        <div class="input-group">
+            <label>Quantum Numbers (n<sub>x</sub>, n<sub>y</sub>, n<sub>z</sub>):</label>
+            <div class="triple-input">
+                <input type="number" id="nx" value="1" min="1">
+                <input type="number" id="ny" value="1" min="1">
+                <input type="number" id="nz" value="1" min="1">
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label>Box Lengths (L<sub>x</sub>, L<sub>y</sub>, L<sub>z</sub> in nm):</label>
+            <div class="triple-input">
+                <input type="number" id="Lx" value="1" step="0.1">
+                <input type="number" id="Ly" value="1" step="0.1">
+                <input type="number" id="Lz" value="1" step="0.1">
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label>Particle Mass:</label>
+            <select id="mass" onchange="toggleCustomMass()">
+                <option value="electron">Electron</option>
+                <option value="proton">Proton</option>
+                <option value="custom">Custom</option>
+            </select>
+        </div>
+
+        <div class="input-group" id="custom-mass-container">
+            <label>Custom Mass (kg):</label>
+            <input type="number" id="customMass" value="9.11e-31" step="1e-30">
+        </div>
+
+        <button class="calculate-btn" onclick="calculate()">🚀 Calculate</button>
+    </div>
+
+    <!-- Results -->
+    <h2>3D Wavefunction ψ(x,y,z)</h2>
+    <div id="wavefunction"></div>
+
+    <h2>Probability Density |ψ(x,y,z)|²</h2>
+    <div id="probability"></div>
+
+    <h2>Energy</h2>
+    <div id="energy"></div>
+
+    <!-- Visualization Controls -->
+    <h2>Interactive Visualisations</h2>
+    <div class="panel">
+        <label>
+            Grid resolution:
+            <input id="gridN" type="number" value="30" min="8" max="80" step="1">
+        </label>
+        <label>
+            Plot type:
+            <select id="plotMode">
+                <option value="slices">2D slices</option>
+                <option value="isosurface">3D isosurface</option>
+                <option value="volume">3D volume</option>
+            </select>
+        </label>
+        <button id="plotBtn" class="calculate-btn">📊 Plot</button>
+
+        <div style="margin-top:15px;">
+            <label>
+                Slice axis:
+                <select id="sliceAxis">
+                    <option value="z">z</option>
+                    <option value="y">y</option>
+                    <option value="x">x</option>
+                </select>
+            </label>
+            <input type="range" id="sliceSlider" min="0" max="100" value="50" style="width:100%">
+        </div>
+
+        <div id="slicePlot" style="height:400px; margin-top:15px;"></div>
+        <div id="plot3d" style="height:600px; margin-top:20px;"></div>
+    </div>
+
+    <!-- Theory -->
+    <h2>Theory</h2>
+    <div class="theory">
+        <p>For a particle in a 3D box of size \(L_x \times L_y \times L_z\), the energy levels are:</p>
+        <p>
+            \[
+            E_{n_x,n_y,n_z} = \frac{\pi^2 \hbar^2}{2m}
+            \left( \frac{n_x^2}{L_x^2} + \frac{n_y^2}{L_y^2} + \frac{n_z^2}{L_z^2} \right)
+            \]
+        </p>
+        <p>The wavefunction is:</p>
+        <p>
+            \[
+            \psi_{n_x,n_y,n_z}(x,y,z) =
+            \sqrt{\frac{8}{L_x L_y L_z}}
+            \sin\!\left(\frac{n_x \pi x}{L_x}\right)
+            \sin\!\left(\frac{n_y \pi y}{L_y}\right)
+            \sin\!\left(\frac{n_z \pi z}{L_z}\right)
+            \]
+        </p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
